@@ -133,7 +133,10 @@ public class MediaFile {
     }
 
     public File getFile() {
-        // TODO: Optimize
+         // TODO: Optimize
+        if (mediaType.equals(MediaType.MUSIC_SINGLE_FILE)){
+            return new File(getSingleFileAlbumSongWholePath());
+        }
         return new File(path);
     }
 
@@ -154,7 +157,7 @@ public class MediaFile {
     }
 
     public boolean isAudio() {
-        return mediaType == MediaType.MUSIC || mediaType == MediaType.AUDIOBOOK || mediaType == MediaType.PODCAST;
+        return mediaType == MediaType.MUSIC || mediaType == MediaType.AUDIOBOOK || mediaType == MediaType.PODCAST || mediaType == MediaType.MUSIC_SINGLE_FILE;
     }
 
     public String getFormat() {
@@ -170,11 +173,11 @@ public class MediaFile {
     }
 
     public boolean isFile() {
-        return mediaType != MediaType.DIRECTORY && mediaType != MediaType.ALBUM;
+        return mediaType != MediaType.DIRECTORY && mediaType != MediaType.ALBUM && mediaType != MediaType.ALBUM_SINGLE_FILE;
     }
 
     public boolean isAlbum() {
-        return mediaType == MediaType.ALBUM;
+        return mediaType == MediaType.ALBUM || mediaType == MediaType.ALBUM_SINGLE_FILE;
     }
 
     public String getTitle() {
@@ -461,12 +464,33 @@ public class MediaFile {
         };
     }
 
+    public void setPathForSingleFileMedia(String mediaFilePath, int songStart, int songEnd) {
+        setPath(mediaFilePath + ":" + songStart + ":" + songEnd);
+    }
+
+    public String getSingleFileAlbumSongBegin(){
+        String[] parts = path.split(":");
+        return parts[parts.length-2];
+    }
+
+    public String getSingleFileAlbumSongEnd(){
+        String[] parts = path.split(":");
+        return parts[parts.length-1];
+    }
+
+    private String getSingleFileAlbumSongWholePath(){
+        String[] parts = path.split(":");
+        return parts[parts.length-3];
+    }
+
     public static enum MediaType {
         MUSIC,
         PODCAST,
         AUDIOBOOK,
         VIDEO,
         DIRECTORY,
-        ALBUM
+        ALBUM,
+        ALBUM_SINGLE_FILE,
+        MUSIC_SINGLE_FILE
     }
 }

@@ -1277,6 +1277,9 @@ public class RESTController {
                 case MUSIC:
                     child.setType(MediaType.MUSIC);
                     break;
+                case MUSIC_SINGLE_FILE:
+                    child.setType(MediaType.MUSIC);
+                    break;
                 case PODCAST:
                     child.setType(MediaType.PODCAST);
                     break;
