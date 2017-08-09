@@ -29,12 +29,12 @@ import org.airsonic.player.service.metadata.MetaData;
 import org.airsonic.player.service.metadata.MetaDataParser;
 import org.airsonic.player.service.metadata.MetaDataParserFactory;
 import org.airsonic.player.util.FileUtil;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.opf_labs.audio.CueParser;
 import org.opf_labs.audio.CueSheet;
 import org.opf_labs.audio.Position;
 import org.opf_labs.audio.TrackData;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -389,7 +389,7 @@ public class MediaFileService {
             storedChildrenMap.put(child.getPath(), child);
         }
 
-        if (parent.getMediaType() == ALBUM_SINGLE_FILE) {
+        if (parent.getMediaType() == MediaFile.MediaType.ALBUM_SINGLE_FILE) {
             for (MediaFile child: createSingleFileAlbumChildren(parent)){
                 if (storedChildrenMap.remove(child.getPath()) == null) {
                     mediaFileDao.createOrUpdateMediaFile(child);
@@ -436,7 +436,7 @@ public class MediaFileService {
                     for (int i = 0; i < cueSheet.getAllTrackData().size(); i++) {
                         TrackData trackData = cueSheet.getAllTrackData().get(i);
                         MediaFile mediaFile = new MediaFile();
-                        mediaFile.setMediaType(MUSIC_SINGLE_FILE);
+                        mediaFile.setMediaType(MediaFile.MediaType.MUSIC_SINGLE_FILE);
                         mediaFile.setAlbumArtist(cueSheet.getPerformer());
                         mediaFile.setAlbumName(cueSheet.getTitle());
                         mediaFile.setTitle(trackData.getTitle());
@@ -616,10 +616,10 @@ public class MediaFileService {
 
                 } else {
                     mediaFile.setArtist(file.getName());
-                }                 }
+                }
                 
                 if (isSingleFileAlbum(file)){
-                    mediaFile.setMediaType(ALBUM_SINGLE_FILE);
+                    mediaFile.setMediaType(MediaFile.MediaType.ALBUM_SINGLE_FILE);
                 }
             }
         }
